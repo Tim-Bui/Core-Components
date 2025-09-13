@@ -1,0 +1,41 @@
+{
+  "name": "ecommerce-clone",
+  "version": "1.0.0",
+  "description": "A modern full-stack ecommerce application built with React, Node.js, Express, and PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "setup": "npm run install:all && echo 'Setup complete! Run npm run dev to start both servers'",
+    "setup:db": "cd backend && npm run setup-db",
+    "sync:db": "cd backend && npm run sync-db"
+  },
+  "keywords": [
+    "ecommerce",
+    "react",
+    "nodejs",
+    "express",
+    "postgresql",
+    "stripe",
+    "fullstack",
+    "shopping-cart",
+    "authentication"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ecommerce-clone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ecommerce-clone/issues"
+  },
+  "homepage": "https://github.com/yourusername/ecommerce-clone#readme"
+}
