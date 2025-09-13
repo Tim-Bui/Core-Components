@@ -67,11 +67,11 @@ CREATE TABLE order_items (
 -- Sample Data
 ---------------------------------------------------------
 INSERT INTO products (name, description, price, image_url, stock_quantity) VALUES 
-('Wireless Mouse', 'Ergonomic wireless mouse with USB-C receiver', 49.99, 'https://via.placeholder.com/150', 100),
-('Mechanical Keyboard', 'RGB mechanical keyboard with blue switches', 99.99, 'https://via.placeholder.com/150', 50),
-('HD Monitor', '24-inch 1080p monitor with HDMI support', 149.99, 'https://via.placeholder.com/150', 30),
-('Noise-Cancelling Headphones', 'Over-ear Bluetooth headphones with active noise cancellation', 199.99, 'https://via.placeholder.com/150', 25),
-('USB-C Hub', 'Multiport adapter with HDMI, USB 3.0, and SD card reader', 49.99, 'https://via.placeholder.com/150', 75);
+('Wireless Mouse', 'Ergonomic wireless mouse with USB-C receiver', 49.99, 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop', 100),
+('Mechanical Keyboard', 'RGB mechanical keyboard with blue switches', 99.99, 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=300&h=300&fit=crop', 50),
+('HD Monitor', '24-inch 1080p monitor with HDMI support', 149.99, 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=300&h=300&fit=crop', 30),
+('Noise-Cancelling Headphones', 'Over-ear Bluetooth headphones with active noise cancellation', 199.99, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop', 25),
+('USB-C Hub', 'Multiport adapter with HDMI, USB 3.0, and SD card reader', 49.99, 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop', 75);
 
 -- Create admin user (password: admin123)
 INSERT INTO users (name, email, password_hash, role) VALUES 

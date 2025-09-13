@@ -215,9 +215,12 @@ function Cart() {
                 {cartItems.map((item) => (
                   <div key={item.cart_id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
                     <img
-                      src="https://via.placeholder.com/80"
+                      src={item.image_url || 'https://via.placeholder.com/80x80?text=No+Image'}
                       alt={item.name}
                       className="w-20 h-20 object-cover rounded-md"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/80x80?text=No+Image';
+                      }}
                     />
                     <div className="flex-1">
                       <h3 className="font-medium text-gray-900">{item.name}</h3>

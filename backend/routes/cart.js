@@ -47,7 +47,7 @@ router.get("/", authenticateToken, async (req, res) => {
     const userId = req.user.user_id;
 
     const result = await pool.query(
-      `SELECT c.cart_id, c.quantity, p.product_id, p.name, p.price
+      `SELECT c.cart_id, c.quantity, p.product_id, p.name, p.price, p.image_url
        FROM cart c
        JOIN products p ON c.product_id = p.product_id
        WHERE c.user_id = $1`,
@@ -87,7 +87,7 @@ router.post("/checkout", authenticateToken, async (req, res) => {
 
     // Get user's cart items with product details
     const cartItems = await pool.query(
-      `SELECT c.cart_id, c.quantity, p.product_id, p.name, p.price
+      `SELECT c.cart_id, c.quantity, p.product_id, p.name, p.price, p.image_url
        FROM cart c
        JOIN products p ON c.product_id = p.product_id
        WHERE c.user_id = $1`,
@@ -164,7 +164,7 @@ router.post("/create-checkout-session", authenticateToken, async (req, res) => {
 
     // Get user's cart items
     const cartItems = await pool.query(
-      `SELECT c.quantity, p.product_id, p.name, p.price
+      `SELECT c.quantity, p.product_id, p.name, p.price, p.image_url
        FROM cart c
        JOIN products p ON c.product_id = p.product_id
        WHERE c.user_id = $1`,
@@ -233,7 +233,7 @@ router.post("/webhook", express.raw({ type: 'application/json' }), async (req, r
     try {
       // Get cart items and create order
       const cartItems = await pool.query(
-        `SELECT c.quantity, p.product_id, p.name, p.price
+        `SELECT c.quantity, p.product_id, p.name, p.price, p.image_url
          FROM cart c
          JOIN products p ON c.product_id = p.product_id
          WHERE c.user_id = $1`,
