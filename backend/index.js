@@ -19,7 +19,7 @@ app.use(cors());
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://your-vercel-domain.vercel.app"
+  "https://core-components.vercel.app/"
 ];
 
 app.use(cors({
