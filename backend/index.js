@@ -16,6 +16,20 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://your-vercel-domain.vercel.app"
+];
+
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    cb(new Error("Not allowed by CORS"));
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
