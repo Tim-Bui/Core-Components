@@ -14,17 +14,17 @@ initializeStripe();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://core-components.vercel.app/"
+  "https://core-components.vercel.app"
 ];
 
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    if (!origin) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    if (origin.endsWith(".vercel.app")) return cb(null, true);
     cb(new Error("Not allowed by CORS"));
   },
   credentials: true
