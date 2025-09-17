@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/products.js";
 import cartRoutes, { initializeStripe } from "./routes/cart.js";
 import orderRoutes from "./routes/orders.js";
+import pool from "./db.js";
 
 dotenv.config();
 
@@ -33,6 +34,20 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
+// Temporary diagnostics endpoint to inspect DB connection and tables
+app.get("/api/_dbinfo", async (req, res) => {
+  try {
+    const dbRes = await pool.query("select current_database() as db");
+    const tablesRes = await pool.query("select table_name from information_schema.tables where table_schema='public' order by 1");
+    res.json({
+      database: dbRes.rows?.[0]?.db,
+      tables: tablesRes.rows?.map(r => r.table_name) || []
+    });
+  } catch (err) {
+    console.error("/api/_dbinfo error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 app.get("/", (req, res) => {
   res.json({ message: "Ecommerce API is running!" });
 });
