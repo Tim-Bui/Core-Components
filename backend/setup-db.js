@@ -36,11 +36,18 @@ async function setupDatabase() {
     for (const statement of statements) {
       if (statement.trim()) {
         try {
-          await pool.query(statement);
+          const result = await pool.query(statement);
           console.log('✓ Executed:', statement.substring(0, 50) + '...');
+          if (result.rows && result.rows.length > 0) {
+            console.log('  Result:', result.rows.length, 'rows affected');
+          }
         } catch (err) {
           console.error('✗ Error executing:', statement.substring(0, 50) + '...');
           console.error('Error details:', err.message);
+          console.error('Error code:', err.code);
+          console.error('Full statement:', statement);
+          // Don't continue if we hit an error
+          throw err;
         }
       }
     }
