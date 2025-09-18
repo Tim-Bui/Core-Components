@@ -10,9 +10,15 @@ async function setupDatabase() {
   try {
     // Diagnostics: show which DB we're targeting and existing tables
     const beforeDb = await pool.query('select current_database() as db');
-    const beforeTables = await pool.query("select table_name from information_schema.tables where table_schema='public' order by 1");
+    const beforeTables = await pool.query("select table_schema, table_name from information_schema.tables where table_type='BASE TABLE' order by 1,2");
     console.log('Target database:', beforeDb.rows?.[0]?.db);
-    console.log('Tables BEFORE:', beforeTables.rows.map(r => r.table_name));
+    console.log('Tables BEFORE:', beforeTables.rows);
+    const searchPath = await pool.query('SHOW search_path');
+    console.log('search_path BEFORE:', searchPath.rows?.[0]);
+
+    // Ensure public schema exists and is in search_path
+    await pool.query('CREATE SCHEMA IF NOT EXISTS public');
+    await pool.query("SET search_path TO public");
 
     // Read the SQL file
     const sqlFile = path.join(__dirname, 'ecommerce.sql');
@@ -55,8 +61,10 @@ async function setupDatabase() {
     console.log('Database setup completed!');
 
     // Diagnostics: list tables after running
-    const afterTables = await pool.query("select table_name from information_schema.tables where table_schema='public' order by 1");
-    console.log('Tables AFTER:', afterTables.rows.map(r => r.table_name));
+    const afterTables = await pool.query("select table_schema, table_name from information_schema.tables where table_type='BASE TABLE' order by 1,2");
+    console.log('Tables AFTER:', afterTables.rows);
+    const searchPathAfter = await pool.query('SHOW search_path');
+    console.log('search_path AFTER:', searchPathAfter.rows?.[0]);
     
   } catch (err) {
     console.error('Setup failed:', err);
