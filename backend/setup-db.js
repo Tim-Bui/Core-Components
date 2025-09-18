@@ -22,19 +22,34 @@ async function setupDatabase() {
 
     // Read the SQL file
     const sqlFile = path.join(__dirname, 'ecommerce.sql');
-    const sqlContent = fs.readFileSync(sqlFile, 'utf8');
-    
-    // Split the SQL content into individual statements
-    // Remove the CREATE DATABASE and \c commands as they should be run separately
-    const statements = sqlContent
+    const rawSql = fs.readFileSync(sqlFile, 'utf8');
+
+    // Normalize line endings and strip BOM if present
+    let sqlContent = rawSql.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+
+    // Remove comment-only lines and admin-only commands
+    const filteredSql = sqlContent
+      .split('\n')
+      .filter(line => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('--')) return false; // full-line comment
+        if (/^CREATE\s+DATABASE/i.test(trimmed)) return false;
+        if (/^\\c\b/.test(trimmed)) return false; // psql connect command
+        return true;
+      })
+      .join('\n');
+
+    // Split into individual statements on semicolons that end a statement
+    const statements = filteredSql
       .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => 
-        stmt.length > 0 && 
-        !stmt.startsWith('--') && 
-        !stmt.startsWith('CREATE DATABASE') &&
-        !stmt.startsWith('\\c')
-      );
+      .map(part => part.trim())
+      .filter(part => part.length > 0)
+      .map(part => part + ';');
+
+    console.log('Total SQL statements to run:', statements.length);
+    if (statements.length > 0) {
+      console.log('First statement preview:', statements[0].substring(0, 80));
+    }
     
     console.log('Setting up database...');
     
