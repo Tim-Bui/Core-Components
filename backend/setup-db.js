@@ -8,6 +8,12 @@ const __dirname = path.dirname(__filename);
 
 async function setupDatabase() {
   try {
+    // Diagnostics: show which DB we're targeting and existing tables
+    const beforeDb = await pool.query('select current_database() as db');
+    const beforeTables = await pool.query("select table_name from information_schema.tables where table_schema='public' order by 1");
+    console.log('Target database:', beforeDb.rows?.[0]?.db);
+    console.log('Tables BEFORE:', beforeTables.rows.map(r => r.table_name));
+
     // Read the SQL file
     const sqlFile = path.join(__dirname, 'ecommerce.sql');
     const sqlContent = fs.readFileSync(sqlFile, 'utf8');
@@ -40,6 +46,10 @@ async function setupDatabase() {
     }
     
     console.log('Database setup completed!');
+
+    // Diagnostics: list tables after running
+    const afterTables = await pool.query("select table_name from information_schema.tables where table_schema='public' order by 1");
+    console.log('Tables AFTER:', afterTables.rows.map(r => r.table_name));
     
   } catch (err) {
     console.error('Setup failed:', err);
